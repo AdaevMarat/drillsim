@@ -1140,13 +1140,14 @@ function change_slugging_level_of_auqa_in_pipe(value) {
     $('.slugging_level_if_aqua_in_pipe_left_text').text(value + "%");
 }
 
-
 function change_slugging_level_of_auqa_in_reservoir(value) {
-    $('.slugging_level_of_aqua_in_reservoir_div').css("height", "" + value + "%");
-    $('.slugging_level_of_aqua_in_reservoir_text').text(value + "%");
+    $('.slugging_level_of_aqua_in_reservoir_div,#pumps_level_of_aqua_in_reservoir_text').css("height", "" + value + "%");
+    var rotor_aqua_level_in_reservior_ranges_top = 84 - value * 0.08;
+    var pumps_aqua_level_in_reservior_ranges_top = 88.5 - value * 0.16;
+    $('.rotor_aqua_level_in_reservior_ranges').css("top", "" + rotor_aqua_level_in_reservior_ranges_top + "%");
+    $('.pumps_aqua_level_in_reservior_ranges').css("top", "" + pumps_aqua_level_in_reservior_ranges_top + "%");
+    $('.slugging_level_of_aqua_in_reservoir_text,#pumps_level_of_aqua_in_reservoir_text').text(value + "%");
 }
-
-
 //end
 
 
@@ -1697,7 +1698,7 @@ function calculate_pogpm_new(val) {
     var res = in_range(s.FLAL, low, high);
     if (res > 0) {
         //console.log("%cIN RANGE: " + s.FLAL, "background: yellow, color: red");
-        $('.left_alert').attr("src", imagePath + "on_state_alert.svg").css("-webkit-animation", "none");
+        $('.left_alert').attr("src", imagePath + "off_state_alert.svg").css("-webkit-animation", "none");
         // turn off budilniki
     } else {
         //console.log("%cOUT OF RANGE: " + s.FLAL, "background: yellow, color: red");
