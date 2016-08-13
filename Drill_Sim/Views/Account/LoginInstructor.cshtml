@@ -1,0 +1,92 @@
+﻿@using Drill_Sim.Models
+
+@{
+    Layout = null;
+}
+
+@model InstructorLoginViewModel
+
+<!doctype html>
+<html>
+<head>
+
+    <title>Instructor Login | Drill Sim</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Drill Sim">
+    <meta name="keywords" content="Drill Sim">
+    <link rel="stylesheet" type="text/css" href="~/Content/login_style.css">
+
+    <script src="~/Scripts/manual_js/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/manual_js/jquery.fullscreen.js"></script>
+    <script src="~/Scripts/manual_js/jqueryrotate.2.1.js"></script>
+    <script src="~/Scripts/manual_js/jquery.animateNumber.js"></script>
+    <script src="~/Scripts/manual_js/jquery.animateNumber.min.js"></script>
+    <script src="~/Scripts/manual_js/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/manual_js/d3.min.js"></script>
+    <script src="~/Scripts/manual_js/instructor_login_scripts.js"></script>
+
+</head>
+
+<body>
+    <div class="main_container">
+        <div class="wrapper">
+
+            <div class="container">
+                <div class="header">
+                    <div id="kbtu_logo">
+
+                    </div><div id="sim_logo">
+
+                    </div><div id="ieit_logo">
+
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="login_div">
+                        <div class="title">
+                            <p class="title_text">СИМУЛЯТОР БУРЕНИЯ</p>
+                        </div>
+                        <div class="login_form_border">
+                            <p class="auth">АВТОРИЗАЦИЯ</p>
+                            @using (Html.BeginForm("LoginInstructor", "Account", FormMethod.Post, new { @id = "login_form_id", @class = "login_form", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="fields">
+                                    <div class="login_field">
+                                        <div id="login_text_div"><p id="login_text">ЛОГИН</p></div><div id="login_field_div">
+                                            @Html.EditorFor(m => m.Username, new { htmlAttributes = new { @id = "login", @value = "", @onblur = "if (this.value == '') {this.value = ' Логин'; this.type='text';} else this.type='text';", @onfocus = "if (this.value == ' Логин') {this.value = '';} this.type='text';" } })
+                                        </div>
+                                    </div><div class="password_field">
+                                        <div id="password_text_div"><p id="password_text">ПАРОЛЬ</p></div><div id="password_field_div">
+                                            @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @id = "password", @value = "", @onblur = "if (this.value == '') {this.value = ' Пароль'; this.type='password';} else this.type='password';", @onfocus = "if (this.value == ' Пароль') {this.value = '';} this.type='password';" } })
+                                        </div>
+                                    </div>
+                                </div><div class="submit_button">
+                                    <span class="helper"></span>
+                                    <img id="submit_btn_id" class="restart_icon" src="~/Content/images/submit_button.svg">
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="languages">
+                    <div id="kaz">
+                        <p id="kaz_text">ҚАЗ</p>
+                    </div><div id="rus">
+                        <p id="langugae_selected">РУС</p>
+                    </div><div id="eng">
+                        <p id="eng_text">ENG</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+</body>
+
+</html>
