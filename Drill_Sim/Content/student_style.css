@@ -1885,6 +1885,7 @@ table{
 .slugging_level_if_aqua_in_pipe_right_top_icon{
 	width: 20%;
 	vertical-align: middle;
+    padding-left:10%;
 }
 
 .slugging_level_if_aqua_in_pipe_right_top_text{
@@ -1908,6 +1909,7 @@ table{
 .slugging_level_if_aqua_in_pipe_right_bottom_icon{
 	width: 20%;
 	vertical-align: middle;
+    padding-left:10%;
 }
 
 .slugging_level_if_aqua_in_pipe_right_bottom_text{
@@ -3276,4 +3278,5 @@ table{
     top: 87%;
     left: -6%;
 }
+
 /*05.04.2016*/

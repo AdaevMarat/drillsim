@@ -415,7 +415,6 @@
     <Content Include="Content\images\·®¨„´Ô‚Æê11.svg" />
     <Content Include="Content\instructor_style.css" />
     <Content Include="Content\login_style.css" />
-    <Content Include="Content\rotor_style.css" />
     <Content Include="Content\simplebar.css" />
     <Content Include="Content\slick.css" />
     <Content Include="Content\sounds\bleep_sound.mp3" />
@@ -459,7 +458,6 @@
     <Content Include="Scripts\manual_js\math.js" />
     <Content Include="Scripts\manual_js\rotor_scripts.js" />
     <Content Include="Scripts\manual_js\simplebar.js" />
-    <Content Include="Scripts\manual_js\student_scripts.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
