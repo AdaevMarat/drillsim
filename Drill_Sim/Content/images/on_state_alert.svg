@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X7 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="23.2834mm" height="36.5122mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 10730 16826"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#1A1A1A;stroke-width:365.767}
+    .fil3 {fill:none}
+    .fil0 {fill:#1A1A1A}
+    .fil2 {fill:#FF1F1F}
+    .fil1 {fill:#FF4C00}
+   ]]>
+  </style>
+     <mask id="id0">
+  <linearGradient id="id1" gradientUnits="userSpaceOnUse" x1="5364.93" y1="7908.25" x2="5364.93" y2="504.802">
+   <stop offset="0" style="stop-opacity:1; stop-color:white"/>
+   <stop offset="1" style="stop-opacity:0; stop-color:white"/>
+  </linearGradient>
+      <rect style="fill:url(#id1)" x="-46" y="-46" width="10822" height="8505"/>
+     </mask>
+     <mask id="id2">
+  <linearGradient id="id3" gradientUnits="userSpaceOnUse" x1="5364.93" y1="8917.95" x2="5364.93" y2="16321.4">
+   <stop offset="0" style="stop-opacity:1; stop-color:white"/>
+   <stop offset="1" style="stop-opacity:0; stop-color:white"/>
+  </linearGradient>
+      <rect style="fill:url(#id3)" y="8413" width="10730" height="8413"/>
+     </mask>
+ </defs>
+ <g id="Слой_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_806126798384">
+   <circle class="fil0" transform="matrix(-0.748623 -0.748623 -0.748623 0.748623 5364.92 8413.09)" r="1646"/>
+   <circle class="fil1" transform="matrix(-0.54274 -0.54274 -0.54274 0.54274 5364.92 8413.09)" r="1646"/>
+   <g>
+    <path class="fil2" style="mask:url(#id0)" d="M9159 7181c-2096,1643 -5492,1643 -7588,0 -2095,-1643 -2095,-4306 0,-5949 2096,-1643 5492,-1643 7588,0 2095,1643 2095,4306 0,5949z"/>
+    <path class="fil2" style="mask:url(#id2)" d="M9159 9645c-2096,-1643 -5492,-1643 -7588,0 -2095,1643 -2095,4306 0,5949 2096,1643 5492,1643 7588,0 2095,-1643 2095,-4306 0,-5949z"/>
+   </g>
+   <line class="fil3 str0" x1="6993" y1="8413" x2="3737" y2= "8413" />
+  </g>
+ </g>
+</svg>

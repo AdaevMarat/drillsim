@@ -1,0 +1,244 @@
+﻿@using Drill_Sim.Models
+@{
+    Layout = "";
+}
+
+@model LoginViewModel
+
+<!doctype html>
+<html>
+<head>
+    <title>Login | Drill Sim</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Drill Sim">
+    <meta name="keywords" content="Drill Sim">
+
+
+    <link rel="stylesheet" type="text/css" href="~/Content/login_style.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/simplebar.css">
+
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/manual_js/jquery.fullscreen.js"></script>
+    <script src="~/Scripts/manual_js/jqueryrotate.2.1.js"></script>
+    <script src="~/Scripts/manual_js/jquery.animateNumber.js"></script>
+    <script src="~/Scripts/manual_js/jquery.animateNumber.min.js"></script>
+    <script src="~/Scripts/manual_js/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/manual_js/d3.min.js"></script>
+    <script src="~/Scripts/manual_js/login_scripts.js"></script>
+    <script src="~/Scripts/manual_js/simplebar.js"></script>
+      
+
+</head>
+
+<body>
+    <div class="main_container">
+        <div class="wrapper">
+            <div class="container">
+                <div class="header">
+                    <div id="kbtu_logo">
+
+                    </div><div id="sim_logo">
+
+                    </div><div id="ieit_logo">
+
+                    </div>
+                </div>
+
+                <div class="content">
+
+                    <div class="practice_exam_choice_div">
+                        <div class="title">
+                            <p class="title_text">СИМУЛЯТОР БУРЕНИЯ</p>
+                        </div>
+                        <div class="practice_exam_choice">
+                            <div class="practice">
+                                <div class="practice_text_div">
+                                    <p class="practice_text">ПРАКТИКА</p>
+                                </div>
+                            </div><div class="exam">
+                                <div class="exam_text_div">
+                                    <p class="exam_text">СДАЧА<br>ЭКЗАМЕНА</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="exam_auth">
+                        <p class="auth_title">АВТОРИЗАЦИЯ</p>
+                        @using (Ajax.BeginForm("Login", "Account", FormMethod.Post, new AjaxOptions() { OnSuccess = "fill_form" }, new { @class = "exam_login_form", @id = "exam_form" }))
+                        {
+                            // @Html.AntiForgeryToken()
+                            <div class="exam_fields">
+                                <div class="exam_field">
+                                    <div id="exam_text_div"><p id="exam_text">ПАРОЛЬ</p></div><div id="exam_field_div">
+                                        <!--<input id="exam_input_1" type="text" value=" Пароль" onblur="if (this.value == '') {this.value = ' Пароль'; this.type='text';} else this.type='password';" onfocus="if (this.value == ' Пароль') {this.value = '';} this.type='password';"> -->
+                                        @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @id = "exam_input_1", @value = "", @onblur = "if (this.value == '') {this.value = ' Пароль'; this.type='text';} else this.type='text';", @onfocus = "if (this.value == ' Пароль') {this.value = '';} this.type='text';" } })
+                                    </div>
+                                </div><div class="exam_field">
+                                    <div id="exam_text_div"><p id="exam_text">ФАМИЛИЯ И ИМЯ <br><span id="sub_exam_text">латиницей как в удостоверении</span></p></div><div id="exam_field_div">
+                                        @Html.EditorFor(m => m.Username, new { htmlAttributes = new { @id = "exam_input_2", @value = "", @onblur = "if (this.value == '') {this.value = ' Фамилия и имя'; this.type='text';} else this.type='text';", @onfocus = "if (this.value == ' Фамилия и имя') {this.value = '';} this.type='text';", @readonly = true } })
+                                    </div>
+                                </div><div class="exam_field">
+                                    <div id="exam_text_div"><p id="exam_text">№ ПАСПОРТА / УД. ЛИЧ.</p></div><div id="exam_field_div">
+                                        <input id="exam_input_3" value=" № паспорта уд. лич." onblur="if (this.value == '') {this.value = ' № паспорта/ уд. лич.';}" onfocus="if (this.value == ' № паспорта/ уд. лич.') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="exam_field">
+                                    <div id="exam_text_div"><p id="exam_text">КЕМ ВЫДАНО</p></div><div id="exam_field_div">
+                                        <input id="exam_input_4" value=" Кем выдано" onblur="if (this.value == '') {this.value = ' Кем выдано';}" onfocus="if (this.value == ' Кем выдано') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="exam_field">
+                                    <div id="exam_text_div"><p id="exam_text">НАЗВАНИЕ КУРСА</p></div><div id="exam_field_div">
+                                        <input id="exam_input_5" value=" Название курса" onblur="if (this.value == '') {this.value = ' Название курса';}" onfocus="if (this.value == ' Название курса') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="exam_field">
+                                    <div id="exam_text_div"><p id="exam_text">IP НОМЕР</p></div><div id="exam_field_div">
+                                        <input id="exam_input_6" value=" IP номер" onblur="if (this.value == '') {this.value = ' IP номер';}" onfocus="if (this.value == ' IP номер') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="exam_field_with_button">
+                                    <div id="exam_text_div_with_button"><p id="exam_text">УРОВЕНЬ СЛОЖНОСТИ</p></div><div id="exam_field_div_with_button">
+                                        <input id="exam_input_7" value=" Уровень сложности" onblur="if (this.value == '') {this.value = ' Уровень сложности';}" onfocus="if (this.value == ' Уровень сложности') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="exam_submit_button">
+                                    <span class="helper"></span>
+                                    <img class="exam_next_icon" src="~/Content/images/submit_button.svg" onclick="login_exam();">
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="practice_auth">
+                        <p class="auth_title">АВТОРИЗАЦИЯ</p>
+                        @using (Ajax.BeginForm("Login", "Account", new AjaxOptions(){ OnSuccess = "fill_practice_form" }, new { @class = "practice_login_form", @id = "practice_form" }))
+                        {
+                            //@Html.AntiForgeryToken()
+                            <div class="practice_fields">
+                                <div class="practice_field">
+                                    <div id="exam_text_div"><p id="exam_text">ПАРОЛЬ</p></div><div id="practice_field_div">
+                                        <!--<input id="practice_input_1" type="text" value=" Пароль" onblur="if (this.value == '') {this.value = ' Пароль'; this.type='text';} else this.type='password';" onfocus="if (this.value == ' Пароль') {this.value = '';} this.type='password';">-->
+                                        @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @id = "practice_input_1", @value = "", @onblur = "if (this.value == '') {this.value = ' Пароль'; this.type='text';} else this.type='text';", @onfocus = "if (this.value == ' Пароль') {this.value = '';} this.type='text';"} })
+                                    </div>
+                                </div><div class="practice_field">
+                                    <div id="exam_text_div"><p id="exam_text">ФАМИЛИЯ И ИМЯ <br><span id="sub_exam_text">латиницей как в удостоверении</span></p></div><div id="practice_field_div">
+                                        @Html.EditorFor(m => m.Username, new { htmlAttributes = new { @id = "practice_input_2", @value = "", @onblur = "if (this.value == '') {this.value = ' Фамилия и имя'; this.type='text';} else this.type='text';", @onfocus = "if (this.value == ' Фамилия и имя') {this.value = '';} this.type='text';", @readonly = true } })
+                                    </div>
+                                </div><div class="practice_field">
+                                    <div id="exam_text_div"><p id="exam_text">ИМЯ КОМПЬЮТЕРА</p></div><div id="practice_field_div">
+                                        <input id="practice_input_3" value=" Имя компьютера" onblur="if (this.value == '') {this.value = ' Имя компьютера';}" onfocus="if (this.value == ' Имя компьютера') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="practice_field">
+                                    <div id="exam_text_div"><p id="exam_text">IP НОМЕР</p></div><div id="practice_field_div">
+                                        <input id="practice_input_4" value=" IP номер" onblur="if (this.value == '') {this.value = ' IP номер';}" onfocus="if (this.value == ' IP номер') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="practice_field_with_button">
+                                    <div id="practice_text_div_with_button"><p id="exam_text">УРОВЕНЬ КУРСА</p></div><div id="practice_field_div_with_button">
+                                        <input id="practice_input_5" value=" Уровень курса" onblur="if (this.value == '') {this.value = ' Уровень курса';}" onfocus="if (this.value == ' Уровень курса') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="practice_next_submit_button">
+                                    <span class="helper"></span>
+                                    <img class="practice_exam_next_icon" src="~/Content/images/next_icon.svg">
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                    <div class="practice_auth_2">
+                        <p class="auth_title">АВТОРИЗАЦИЯ</p>
+                        <form class="practice_login_form">
+                            <div class="practice_fields">
+                                <div class="practice_field_2">
+                                    <div id="exam_text_div"><p id="exam_text">ФАМИЛИЯ И ИМЯ <br><span id="sub_exam_text">латиницей как в удостоверении</span></p></div><div id="practice_field_div">
+                                        <input id="practice_input_2_1" value=" Фамилия и имя" onblur="if (this.value == '') {this.value = ' Фамилия и имя';}" onfocus="if (this.value == ' Фамилия и имя') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="practice_field_2">
+                                    <div id="exam_text_div"><p id="exam_text">ИМЯ КОМПЬЮТЕРА</p></div><div id="practice_field_div">
+                                        <input id="practice_input_2_2" value=" Имя компьютера" onblur="if (this.value == '') {this.value = ' Имя компьютера';}" onfocus="if (this.value == ' Имя компьютера') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="practice_field_2">
+                                    <div id="exam_text_div"><p id="exam_text">IP НОМЕР</p></div><div id="practice_field_div">
+                                        <input id="practice_input_2_3" value=" IP номер" onblur="if (this.value == '') {this.value = ' IP номер';}" onfocus="if (this.value == ' IP номер') {this.value = '';}" readonly>
+                                    </div>
+                                </div><div class="practice_field_with_button">
+                                    <div id="practice_text_div_with_button"><p id="exam_text">УРОВЕНЬ КУРСА</p></div><div id="practice_field_div_with_button">
+                                        <div id="position_choice">
+                                            <div id="driller">
+                                                <p id="driller_text">Б</p>
+                                            </div><div id="supervisor">
+                                                <p id="supervisor_text">С</p>
+                                            </div><div id="driller_supervisor">
+                                                <p id="driller_supervisor_text">Б+С</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><div class="practice_next_submit_button">
+                                    <span class="helper"></span>
+                                    <img class="practice_exam_next_icon_2" src="~/Content/images/next_icon.svg">
+                                </div>
+                            </div>
+                        </form>
+                    </div><div class="driller_choice">
+                        <div class="drillers_title">
+                            <p class="drillers_title_title">БУРИЛЬЩИК</p>
+                        </div>
+                        <div class="drillers_list">
+                            <ul id="selectable">
+                                
+                            </ul>
+                        </div><div class="drillers_list_next_icon">
+                            <div class="drillers_next_icon_div">
+                                <span class="helper"></span>
+                                <img class="drillers_next_icon" src="~/Content/images/next_icon.svg">
+                            </div>
+                        </div>
+                    </div><div class="snapshot_choice">
+                        <p class="snapshot_choice_title">ВЫБОР СЦЕНАРИЯ</p>
+                        <div class="snapshot_div">
+                            <div class="snapshot_div_left">
+                                <div class="snapshot_div_titles">
+                                    <div class="snapshot_title_file_div"><p class="snapshot_title_text">ФАЙЛ</p></div><div class="snapshot_title_description_div">
+                                        <p class="snapshot_title_text">ОПИСАНИЕ</p>
+                                    </div>
+                                </div><div class="snapshot_list_div">
+                                    <ul id="selectable_snap">
+                                    </ul>
+                                </div>
+                            </div><div class="snapshot_div_right">
+                                <div class="snapshot_div_right_button">
+                                    <span class="helper"></span>
+                                    <img class="snapshot_button" src="~/Content/images/submit_button.svg" onclick="login('#practice_form');">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="languages">
+                    <div id="kaz">
+                        <p id="kaz_text">ҚАЗ</p>
+                    </div><div id="rus">
+                        <p id="langugae_selected">РУС</p>
+                    </div><div id="eng">
+                        <p id="eng_text">ENG</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="loader_div">
+        <div id="loader">
+            <div id="box"></div>
+            <div id="hill"></div>
+        </div>
+    </div>
+
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
+</body>
+
+</html>
