@@ -47,7 +47,6 @@ var ChPos = 0;
 var tCho_timer;
 var qChcum = 0;
 var tCho_sec = 1;
-var CumMV2 = 0;
 var mw_changed = false;
 var prevMW = -1;
 // INFLUX VOLUME VARS
@@ -1325,7 +1324,7 @@ function tk2_calculations() {
         console.log("SICP: " + SICP);
         scope = { pqicum: prev_tk2_qicum, FP: FP, MW: s.MW, Toinf: Toinf, SICP: SICP };
         qicum = math.eval("pqicum*FP/(MW*Toinf*0.052+SICP)", scope);
-        if (qicum + CumMV2 < s.DCaV) {
+        if (qicum + s.CumMV2 < s.DCaV) {
             scope = { qicum: qicum, CumMV2: s.CumMV2, DCAcap: s.DCAcap, MD: s.MD, Boinf: Boinf };
             hinf = math.eval("(qicum+CumMV2)/DCAcap-(MD-Boinf)", scope);
         } else if (qicum + s.CumMV2 > s.DCaV && qicum + s.CumMV2 < s.HWDPaV) { //If (qicumcur+CumMV2) > DCaV and (qicumcur+CumMV2)< HWDPaV then
@@ -1340,6 +1339,9 @@ function tk2_calculations() {
         s.BHPd = math.eval("SICPcur+MW*(MD-hinf)*0.052+MWgas*hinf*0.052", scope);
         console.log("tk2_timer Boinf val and BHPD: " + Boinf + " " + s.BHPd);
         console.log("Toinf and hinf and SICP: " + Toinf + " " + hinf + " " + SICP);
+        prev_tk2_hinf = hinf;
+        prev_tk2_qicum = qicum;
+        prev_tk2_SIDPP = SIDPP;
     }
     // circulate out with kill mud
     if (s.CumMV2 < s.SLV) {
@@ -1377,13 +1379,6 @@ function tk2_calculations() {
         s.DCiPL = math.eval("(Ki1/(DCID^4.8)*( DPlength+HWDPlenght+DClength-hmv2)+(Ki2/(DCID^4.8)*(hmv2-DPlength+HWDPlenght)", scope);
     } else if (s.CumMV2 > (s.DPV + s.HWDPV + s.DCV + s.SLV)) {
         s.hmv2 = s.Dplength + s.HWDP_len + s.DClength;
-        /*
-        Then DCiPL = (Ki2/(DCID^4.8)*DClength
-        BPL= BPL = Vn^2*MW2/1120
-        DSiPL = DPiPL+HWDPiPL+DCiPL
-        Then SIDPPcur = FP-hmv2*0.052*MW2-(MD-hmv2)*MW*0.052
-        DPP = SIDPPcur+ SPL + APL + DSiPL + BPL
-        */
         scope = { Ki2: s.Ki2, DCID: s.DCID, DClength: s.DClength };
         s.DCiPL = math.eval("(Ki2/(DCID^4.8)*DClength", scope);
         scope = { Vn: s.Vn, MW2: s.MW };
@@ -1433,45 +1428,48 @@ function tChg_calculations() {
     tChg_sec++;
 }
 
+var prev_tk1_hinf = 0; var prev_tk1_qicum = 0; var prev_tk1_SIDPP = 0;
+
+// circulate out with old mud
 function tk1_calculations() {
-    /*
-    Open choke and start pump.  Calculate Pump pressure.
-    Start pump and timer spm – tk1 (count till Boinf=0). Calculate CumMV1 = POgpm*tk1 
-    Calculate bottom of influx: 
-    If CumMV1 < DCaV then
-    Calculate Boinf=MD-CumMV1/DCAcap
-    If CumMV1 > DCaV and CumMV1 < (DCaV+ HWDPaV) then
-    Calculate Boinf=MD-(DClenght + (CumMV1-DCaV)/HWDPAcap)
-    If CumMV1 > (DCaV+ HWDPaV) and CumMV1 < (DCaV+ HWDPaV + DPaoV) then
-    Calculate Boinf=MD-(DClenght + HWDPlenght +(CumMV1-DCaV-HWDPaV)/DPAocap)
-    If CumMV1 > (DCaV+ HWDPaV+ DPaoV) and CumMV1 < (DCaV+ HWDPaV + DPaoV+ DPacV) then Calculate Boinf=CassetMD - (CumMV1-DCaV-HWDPaV-DPacV)/DPAccap
-    If CumMV1 = (DCaV+ HWDPaV+DPaoV+DPacV) then Boinf=0
-    Calculate hinf, top of kick and bottom of kick if tk1>0:
-    If (qicumcur+CumMV1) < DCaV then
-    Calculate hinf=(qicumcur+CumMV1)/DCAcap – (MD-Boinf), 
-    If (qicumcur+CumMV1) > DCaV and (qicumcur+CumMV1)< (DCaV+ HWDPaV) then
-    Calculate hinf=DClenght + (qicumcur+CumMV1-DCaV)/HWDPAcap - (MD-Boinf)
-    If (qicumcur+CumMV1) > (DCaV+HWDPaV) and (qicumcur+CumMV1)< (DCaV+HWDPaV+DPaoV) then
-    Calculate hinf=DClenght +HWDPlength + (qicumcur+CumMV1-DCaV-HWDPaV)/DPAocap - (MD-Boinf)
-    If (qicumcur+CumMV1) > (DCaV+HWDPaV+DPaoV) and (qicumcur+CumMV1)< (DCaV+HWDPaV+DPaoV+DPacV) then
-    Calculate hinf=CassetMD + (qicumcur+CumMV1-DCaV-HWDPaV)/DPAocap - (MD-Boinf)
+    var scope = null;
+    if (tk1_sec == 1) {
+        Toinf = s.MD - hinf;
+        prev_tk1_hinf = hinf;
+        prev_tk1_qicum = qicum;
+        prev_tk1_SIDPP = SIDPP;
+    } else {
+        Toinf = Boinf - prev_tk1_hinf;
+        var cur_qCh = getqCh();
+        scope = { pSIDPP: prev_tk1_SIDPP, TaV: aV, qCh: cur_qCh, POgpm: s.POgpm };
+        SIDPP = math.eval("pSIDPP*(TaV/(TaV+qCh-POgpm/60))", scope);
+        //
+        scope = { SIDPP: SIDPP, Toinf: Toinf, MW: s.MW, phinf: prev_tk1_hinf, MWgas: 2, Boinf: Boinf };
+        SICP = math.eval("SIDPP-Toinf*MW*0.052-phinf*MWgas*0.052+Boinf*MW*0.052", scope);
+        set_dpp_display_value(SICP);
+        console.log("SICP: " + SICP);
+        scope = { pqicum: prev_tk1_qicum, FP: FP, MW: s.MW, Toinf: Toinf, SICP: SICP };
+        qicum = math.eval("pqicum*FP/(MW*Toinf*0.052+SICP)", scope);
+        if (qicum + s.CumMV1 < s.DCaV) {
+            scope = { qicum: qicum, CumMV1: s.CumMV1, DCAcap: s.DCAcap, MD: s.MD, Boinf: Boinf };
+            hinf = math.eval("(qicum+CumMV1)/DCAcap-(MD-Boinf)", scope);
+        } else if (qicum + s.CumMV1 > s.DCaV && qicum + s.CumMV1 < s.HWDPaV) { //If (qicumcur+CumMV1) > DCaV and (qicumcur+CumMV1)< HWDPaV then
+            scope = { DClenght: s.DC_len, qicum: qicum, CumMV1: s.CumMV1, DCaV: s.DCaV, HWDPAcap: s.HWDPAcap, MD: s.MD, Boinf: Boinf };
+            hinf = math.eval("DClenght+(qicum+CumMV1-DCaV)/HWDPAcap-(MD-Boinf)", scope);
+        } else if (qicum + s.CumMV1 > (s.DCaV + s.HWDPaV) && qicum + s.CumMV1 < s.DCaV) {
+            scope = { DClenght: s.DC_len, HWDPlength: s.HWDP_len, qicumcur: qicum, CumMV1: s.CumMV1, DCaV: s.DCaV, HWDPaV: s.HWDPaV, DPAcap: s.DPAcap, MD: s.MD, Boinf: Boinf };
+            hinf = math.eval("DClenght+HWDPlength+(qicumcur+CumMV1-DCaV-HWDPaV)/DPAcap-(MD-Boinf)", scope);
+        }
+        s.BHPd = SIDPP + s.MW * s.MD * 0.052;
+        scope = { SICPcur: SICP, MW: s.MW, MD: s.MD, hinf: hinf, MWgas: 2 };
+        s.BHPd = math.eval("SICPcur+MW*(MD-hinf)*0.052+MWgas*hinf*0.052", scope);
+        console.log("tk1_timer Boinf val and BHPD: " + Boinf + " " + s.BHPd);
+        console.log("Toinf and hinf and SICP: " + Toinf + " " + hinf + " " + SICP);
+        prev_tk1_hinf = hinf;
+        prev_tk1_qicum = qicum;
+        prev_tk1_sidpp = SIDPP;
+    }
 
-    Calculate initial top of influx Toinf= MD-hinf
-    Calculate current top of influx Toinf= Boinf-hinf, at time tk1!!!!!!!
-    SIDPPcur = SIDPP(tk1)*(-1+ TaV/(TaV+qCh-POgpm/60))
-    Calculate SICPcur = SIDPPcur – Toinf*MW*0.052-hinf*MWgas*0.052 + Boinf*MW*0.052
-
-    Calculate volumetric expansion of kick (influx) qicumcur=qicum*FP/(MW*Toinf*0.052+SICPcur(tk1)) at time (tk1+1)!!!!!!!
-    BHPd=SIDPPcur+MW*MD*0.052
-    BHPd=SICPcur+MW*(MD-hinf)*0.052+MWgas*hinf*0.052
-
-    If Toinf=0 then qch=qchg, qchg=3, start timer tchg till CumMV1=qicumcur and Boinf=0
-    Calculate total influx bleed volume qchgcum=qchg*tchg, calculate qicumiw=qicumcur-qchgcum
-    If spm=0
-    SIDPP=FP-MW*MD*0.052
-    If spm=0 and If qicumiw=0 then
-    SICPcur=FP-MW*MD*0.052
-    */
     tk1_sec++;
     if (mw_changed) {
         clearInterval(tk1_timer);
@@ -1503,13 +1501,7 @@ function tCho_calculations() {
         }
     }
 
-    // circulate out
-
-    if (!mw_changed && !tk1_timer_started) {// circulate out with old mud
-        // boinf and toinf
-        tk1_timer_started = true;
-        tk1_timer = setInterval(tk1_calculations, 1000);
-    }
+    
 
     if (mw_changed) {
         s.CumMV2 += s.POgpm / 60;
@@ -1532,6 +1524,33 @@ function tCho_calculations() {
         } else if (s.CumMV2 >= (s.DCaV + s.HWDPaV + s.DPaoV + s.DPacV)) {
             Boinf = 0;
         }
+    } else {
+        s.CumMV1 += s.POgpm / 60;
+
+        if (s.CumMV1 < s.DCaV) {
+            console.log("CuMV2 < s.DCaV");
+            Boinf = s.MD - s.CumMV1 / s.DCAcap;
+        } else if (s.CumMV1 > s.DCaV && s.CumMV1 < s.HWDPaV + s.DCaV) {
+            var scope = { MD: s.MD, DClenght: s.DC_len, CumMV1: s.CumMV1, DCaV: s.DCaV, HWDPAcap: s.HWDPAcap };
+            Boinf = Math.eval("MD - (DClenght + (CumMV1 - DCaV) / HWDPAcap)", scope);
+        } else if (s.CumMV1 > s.DCaV + s.HWDPaV && s.CumMV1 < (s.DCaV + s.HWDPaV + s.DPaoV)) {
+            var scope = { MD: s.MD, DClenght: s.DC_len, HWDPlenght: s.HWDP_len, CumMV1: s.CumMV1, DCaV: s.DCaV, HWDPaV: s.HWDPaV, DPAocap: s.DPAocap };
+            Boinf = math.eval("MD-(DClenght + HWDPlenght +(CumMV1-DCaV-HWDPaV)/DPAocap)", scope);
+        } else if (s.CumMV1 > (s.DCaV + s.HWDPaV + s.DPaoV) && s.CumMV1 < (s.DCaV + s.HWDPaV + s.DPaoV + s.DPacV)) {
+            var scope = { CassetMD: s.CassetMD, CumMV1: s.CumMV1, DCaV: s.DCaV, HWDPaV: s.HWDPaV, DPacV: s.DPacV, DPAccap: s.DPAccap };
+            Boinf = math.eval("CassetMD - (CumMV1-DCaV-HWDPaV-DPacV)/DPAccap", scope);
+        } else if (s.CumMV1 < (s.DCaV + s.HWDPaV + s.DPaoV) && s.CumMV1 < (s.DCaV + s.HWDPaV + s.DPaoV + s.DPacV)) {
+            var scope = { CassetMD: s.CassetMD, CumMV1: s.CumMV1, DCaV: s.DCaV, HWDPaV: s.HWDPaV, DPacV: s.DPacV, DPAccap: s.DPAccap };
+            Boinf = math.eval("CassetMD - (CumMV1 - DCaV - HWDPaV - DPacV) / DPAccap", scope);
+        } else if (s.CumMV1 >= (s.DCaV + s.HWDPaV + s.DPaoV + s.DPacV)) {
+            Boinf = 0;
+        }
+    }
+
+    if (!mw_changed && !tk1_timer_started) {// circulate out with old mud
+        // boinf and toinf
+        tk1_timer_started = true;
+        tk1_timer = setInterval(tk1_calculations, 1000);
     }
 
     //if qicum>0 and SIDPP>0, SICP>0, MWpit=MW2, and spm>0

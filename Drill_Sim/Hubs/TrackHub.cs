@@ -13,7 +13,7 @@ namespace Drill_Sim.Hubs
         private UserManager<ApplicationUser> userManager;
 
         public override Task OnConnected()
-        { 
+        {
             return base.OnConnected();
         }
 
@@ -22,7 +22,7 @@ namespace Drill_Sim.Hubs
         public async Task JoinRoom(string roomName, string role)
         {
             await Groups.Add(Context.ConnectionId, roomName);
-            if(role == "driller")
+            if (role == "driller")
             {
                 var user = get_user();
                 GlobalVariables.Online_driller_list_instance.Add(new JsonResultModel()
@@ -47,7 +47,7 @@ namespace Drill_Sim.Hubs
             System.Diagnostics.Debug.WriteLine("List content: ");
             var list = GlobalVariables.Online_driller_list_instance;
             int i = 0;
-            foreach( var user in list)
+            foreach (var user in list)
             {
                 System.Diagnostics.Debug.WriteLine(++i + " " + user);
             }
@@ -56,7 +56,7 @@ namespace Drill_Sim.Hubs
         // TODO:// iterate through db asynchronously to get user info
         public async Task<ApplicationUser> get_user()
         {
-            if(store == null && userManager == null)
+            if (store == null && userManager == null)
             {
                 store = new UserStore<ApplicationUser>(GlobalVariables.Db_instance);
                 userManager = new UserManager<ApplicationUser>(store);
@@ -68,18 +68,18 @@ namespace Drill_Sim.Hubs
         {
             var cur_id = Context.User.Identity.GetUserId();
             // remove from practice list
-            if(GlobalVariables.Online_driller_list_instance != null) 
+            if (GlobalVariables.Online_driller_list_instance != null)
             {
                 for (int i = 0; i < GlobalVariables.Online_driller_list_instance.Count; i++)
                 {
-                    if(GlobalVariables.Online_driller_list_instance[i].id == cur_id)
+                    if (GlobalVariables.Online_driller_list_instance[i].id == cur_id)
                     {
                         GlobalVariables.Online_driller_list_instance.RemoveAt(i);
                     }
                 }
             }
             // remove from exam list
-            if(GlobalVariables.Online_exam_waiting_list_instance != null)
+            if (GlobalVariables.Online_exam_waiting_list_instance != null)
             {
                 for (int i = 0; i < GlobalVariables.Online_exam_waiting_list_instance.Count; i++)
                 {
@@ -100,7 +100,7 @@ namespace Drill_Sim.Hubs
             //roomName uid
             for (var i = 0; i < GlobalVariables.Online_driller_list_instance.Count; i++)
             {
-                if(GlobalVariables.Online_driller_list_instance[i].id == roomName)
+                if (GlobalVariables.Online_driller_list_instance[i].id == roomName)
                 {
                     GlobalVariables.Online_driller_list_instance.RemoveAt(i);
                 }
